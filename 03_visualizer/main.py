@@ -11,6 +11,7 @@ import pygame
 
 GREEN = (0, 255, 0)
 WHITE = (200,200,200)
+YELLOW = (255,255,000)
 BLACK = (0,0,0)
 GRAY = (100,100,100)
 RED = (255,0,0)
@@ -31,9 +32,10 @@ def drawGround(img):
     end_line =   [center[0], center[1] + (sz[1] - dy*2) // 2]
     pygame.draw.rect(img, BLACK, ground_rect, 5)
     pygame.draw.line(img, BLACK, start_line, end_line, 5)
+    pygame.draw.circle(img, BLACK, center, 100, 2)
 
 
-def drawGrid(img, detail, visible=True):
+def drawGrid(img, detail, visible):
     global ground_rect
     sx = ground_rect[0]
     sy = ground_rect[1]
@@ -68,9 +70,9 @@ def drawBall(img, detail, pos_x, pos_y):
 
     curr_x = sx + pos_x * dx
     curr_y = sy + pos_y * dy
-    pygame.draw.circle(img, RED, (curr_x, curr_y), 2)
+    pygame.draw.circle(img, YELLOW, (curr_x, curr_y), 5)
 
-def drawPlayers(img, detail, positions, randomness, home=True):
+def drawPlayers(img, detail, positions, randomness, home):
     for i, position in enumerate(positions):
         if randomness:
             position[1][0] += np.random.randint(-1, 2)
@@ -93,13 +95,13 @@ def drawPlayer(img, detail, position, home):
     curr_x = sx + pos[0] * dx
     curr_y = sy + pos[1] * dy
     if home:
-        pygame.draw.circle(img, BLUE, (curr_x, curr_y), 3)
+        pygame.draw.circle(img, BLUE, (curr_x, curr_y), 10)
     else:
-        pygame.draw.circle(img, RED, (curr_x, curr_y), 3)
+        pygame.draw.circle(img, RED,  (curr_x, curr_y), 10)
 
 
 
-size = [1200, 600]
+size = [1400, 700]
 num_detail = 100
 screen = pygame.display.set_mode(size)
 pygame.display.set_caption("football simulator")
@@ -113,11 +115,6 @@ ground_img = pygame.Surface(size)
 # pos_y = np.random.randint(0, detail[1] + 1)
 pos_x = num_detail
 pos_y = num_detail //2
-
-PX = [pos_x, pos_x, pos_x, pos_x, pos_x, pos_x, pos_x, pos_x, pos_x, pos_x, pos_x, pos_x, pos_x, pos_x, pos_x,pos_x,pos_x,pos_x,pos_x,pos_x]
-PY = [pos_y, pos_y, pos_y, pos_y, pos_y, pos_y, pos_y, pos_y, pos_y, pos_y, pos_y, pos_y, pos_y, pos_y, pos_y,pos_y,pos_y,pos_y,pos_y,pos_y]
-
-
 
 
 team_names = ["리버풀", "맨시티", "레스터시티", "첼시", "맨유", "울버햄튼", "쉐필드", "아스날", "토트넘", "번리", "에버튼", "크리스탈팰리스", "뉴캐슬", "사우스햄튼", "브라이튼", "웨스트햄", "왓포드", "아스톤빌라", "본머스", "노르위치시티"]
@@ -154,16 +151,16 @@ while run:
             run = False
 
     drawGround(ground_img)
-    detail = drawGrid(ground_img, num_detail, visible = True)
+    detail = drawGrid(ground_img, num_detail, visible = False)
     screen.blit(ground_img, (0,0))
 
     ball_img = pygame.Surface(size, pygame.SRCALPHA)
     pos_x += np.random.randint(-1, 2)
     pos_y += np.random.randint(-1, 2)
-    # drawBall(ball_img, brect, detail, pos_x, pos_y)
-    # drawPlayers(ball_img, detail, positions, 1)
-    # screen.blit(ball_img, (0,0))
-    drawPlayers(ball_img, detail, positions, 0)
+    drawBall(ball_img, detail, pos_x, pos_y)
+    drawPlayers(ball_img, detail, positions, randomness=1, home=1)
+    screen.blit(ball_img, (0,0))
+    drawPlayers(ball_img, detail, positions, randomness=1, home=0)
     screen.blit(ball_img, (0,0))
     pygame.display.flip()
 

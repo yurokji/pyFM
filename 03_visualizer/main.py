@@ -101,7 +101,7 @@ def drawPlayer(img, detail, position, home):
 
 
 
-size = [1400, 700]
+size = [1200, 600]
 num_detail = 100
 screen = pygame.display.set_mode(size)
 pygame.display.set_caption("football simulator")
